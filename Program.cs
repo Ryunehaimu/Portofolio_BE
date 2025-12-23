@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using PortfolioBackend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // --- 1. SETUP DATABASE ---
 // Pastikan koneksi ini sesuai dengan yang Anda pakai (SQL Server atau SQLite).
 // Jika sebelumnya pakai SQLite, ganti .UseSqlServer menjadi .UseSqlite
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
 // --- 2. DAFTARKAN CORS ---
 // Kita ubah jadi "AllowAll" agar aman saat diakses via Ngrok (Public)
 builder.Services.AddCors(options =>
